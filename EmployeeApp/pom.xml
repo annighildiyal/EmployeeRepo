@@ -2,73 +2,83 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.1</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
+
 	<groupId>com.ag</groupId>
 	<artifactId>EmployeeApp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>EmployeeApp</name>
-	<description>project for micriservice</description>
-	<url />
-	<licenses>
-		<license />
-	</licenses>
-	<developers>
-		<developer />
-	</developers>
-	<scm>
-		<connection />
-		<developerConnection />
-		<tag />
-		<url />
-	</scm>
+	<description>project for microservice</description>
+
 	<properties>
-		<java.version>17</java.version>
+		<java.version>21</java.version>
+		<maven.compiler.release>21</maven.compiler.release>
 	</properties>
+
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
+
+		<!-- Spring Boot Web -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<!-- Spring Data JPA -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+		<!-- Devtools -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+
+		<!-- MySQL -->
 		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+
+		<!-- Lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+
+		<!-- Test -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 	</dependencies>
 
 	<build>
 		<plugins>
+
+			<!-- Java Compiler for JDK 21 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.11.0</version>
 				<configuration>
+					<release>21</release>
+
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.projectlombok</groupId>
@@ -77,6 +87,8 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
+
+			<!-- Spring Boot Plugin -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -90,27 +102,30 @@
 				</configuration>
 			</plugin>
 
+			<!-- Frontend Build (React/Vite) -->
 			<plugin>
 				<groupId>com.github.eirslett</groupId>
 				<artifactId>frontend-maven-plugin</artifactId>
 				<version>1.12.1</version>
 
+				<configuration>
+					<nodeVersion>v22.13.1</nodeVersion>
+					<npmVersion>10.9.2</npmVersion>
+					<workingDirectory>src/main/frontend/ems-employee-frontend</workingDirectory>
+				</configuration>
+
 				<executions>
-					<!-- installing node and npm -->
+
+					<!-- Install Node & NPM -->
 					<execution>
-						<id>Install node and npm</id>
+						<id>install node and npm</id>
 						<goals>
 							<goal>install-node-and-npm</goal>
 						</goals>
 						<phase>generate-resources</phase>
-						<configuration>
-							<nodeVersion>v22.13.1</nodeVersion>
-							<npmVersion>10.9.2</npmVersion>
-						</configuration>
 					</execution>
 
-
-					<!-- running npm install -->
+					<!-- npm install -->
 					<execution>
 						<id>npm install</id>
 						<goals>
@@ -122,33 +137,28 @@
 						</configuration>
 					</execution>
 
-					<!-- build our production version -->
+					<!-- npm build -->
 					<execution>
-						<id>vite build</id>
+						<id>npm build</id>
 						<goals>
 							<goal>npm</goal>
 						</goals>
 						<phase>generate-resources</phase>
 						<configuration>
-							<arguments>run build</arguments> <!-- This will run
-							`vite build` -->
+							<arguments>run build</arguments>
 						</configuration>
 					</execution>
 
 				</executions>
-				<configuration>
-					<nodeVersion>v22.13.1</nodeVersion>
-					<workingDirectory>src/main/frontend/ems-employee-frontend</workingDirectory>
-				</configuration>
 			</plugin>
 
-			<!-- copy our react build artifacts to spring boot -->
+			<!-- Copy frontend build into Spring Boot static folder -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>Copy JavaScript app into SpringBoot</id>
+						<id>copy frontend</id>
 						<phase>process-resources</phase>
 						<goals>
 							<goal>copy-resources</goal>
@@ -157,8 +167,7 @@
 							<outputDirectory>target/classes/static</outputDirectory>
 							<resources>
 								<resource>
-									<directory>src/main/frontend/ems-employee-frontend/build</directory>
-									<filtering>true</filtering>
+									<directory>src/main/frontend/ems-employee-frontend/dist</directory>
 								</resource>
 							</resources>
 						</configuration>
