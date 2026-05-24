@@ -13,9 +13,7 @@ spring:
     show-sql: true 
     hibernate:
       ddl-auto: update #create table if not there
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
+ 
 
  output:
     ansi:
