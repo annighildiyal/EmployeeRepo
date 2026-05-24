@@ -6,7 +6,7 @@ FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
 
 # Copy project
-COPY pom.xml .
+COPY EmployeeApp/pom.xml .
 COPY src ./src
 
 # Build full project (backend + frontend via Maven plugin)
